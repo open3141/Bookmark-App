@@ -454,9 +454,12 @@ function moveToFolder(old_pname, old_index, new_pname) {
 ////////////
 // DELETE FUNCTIONS
 
-function confirmDialog(cb) {
+function confirmDialog(cb, text) {
+  if (text === undefined) text = "Really delete this?";
   confirmFunc = cb;
-  $("#confirmDialog").dialog('open');
+  var $t = $("#confirmDialog");
+  $t.children("p").eq(0).html(text);
+  $t.dialog('open');
 }
 
 function deleteBmark($li) {
@@ -536,12 +539,12 @@ function deleteFolderHelper(fname) {
 
 function deleteFolderShowParent(fname) {
   if (fname === undefined) fname = data.current_folder;
-  confirmDialog(function() {
-    downloadOrNot(fname, function() {
+  downloadOrNot(fname, function() {
+    confirmDialog(function() {
       var pname = parentFolder(fname);
       deleteFolder(fname);
       showFolder(pname);
-    });
+    }, "Really delete folder \"" + data[fname].title + "\"?");
   });
 }
 
